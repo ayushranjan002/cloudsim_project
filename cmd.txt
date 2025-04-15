@@ -1,0 +1,4 @@
+To compile: javac -cp ".;lib/cloudsim-3.0.3.jar" -d bin src/TaskSchedulerFailureSimulation.java
+
+
+TO run: java -cp ".;lib/cloudsim-3.0.3.jar;bin" TaskSchedulerFailureSimulation
