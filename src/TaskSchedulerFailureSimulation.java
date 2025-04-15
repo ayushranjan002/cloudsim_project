@@ -48,7 +48,7 @@ public class TaskSchedulerFailureSimulation {
                         cloudlet.getCloudletId(), cloudlet.getVmId(), status);
             }
             Log.printLine("Test done successfully!");
-
+            Log.printLine("Test done successfully2!");
         } catch (Exception e) {
             e.printStackTrace();
         }
