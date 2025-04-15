@@ -1,0 +1,31 @@
+name: Java CI with CloudSim
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v4
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+
+    - name: Compile CloudSim Project
+      run: |
+        mkdir -p bin
+        javac -cp ".:lib/cloudsim-3.0.3.jar" -d bin src/*.java
+
+    - name: Run CloudSim Simulation
+      run: |
+        java -cp ".:lib/cloudsim-3.0.3.jar:bin" TaskSchedulerFailureSimulation
