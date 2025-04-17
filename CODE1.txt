@@ -40,8 +40,7 @@ public class TaskSchedulerFailureSimulation {
 
             Random rand = new Random();
             for (int i = 0; i < 10; i++) {
-                // Simulate random execution time between 1000 and 5000 units
-                long length = 1000 + rand.nextInt(4000);  
+                long length = 40000;
                 Cloudlet cloudlet = new Cloudlet(i, length, 1, 512, 300,
                         utilizationModel, utilizationModel, utilizationModel);
                 cloudlet.setUserId(brokerId);
@@ -53,8 +52,7 @@ public class TaskSchedulerFailureSimulation {
                 // Simulate random failure
                 if (rand.nextDouble() < FAILURE_PROBABILITY) {
                     failedCloudletIds.add(i);
-                    // Set a longer execution time for failed cloudlets
-                    cloudlet.setCloudletLength(rand.nextInt(5000));  // Random execution time for failed cloudlets
+                    cloudlet.setCloudletLength(0);
                 }
 
                 cloudletList.add(cloudlet);
@@ -83,7 +81,7 @@ public class TaskSchedulerFailureSimulation {
                 if (failedCloudletIds.contains(id)) {
                     status = "FAILED";
                     failed++;
-                    // Failed cloudlets should not be compared for SLA violations
+                    slaViolated = true;
                 } else {
                     status = (cloudlet.getStatus() == Cloudlet.SUCCESS) ? "SUCCESS" : "FAILED";
                     if (status.equals("SUCCESS")) success++; else failed++;
@@ -102,7 +100,7 @@ public class TaskSchedulerFailureSimulation {
                 System.out.printf("Cloudlet ID: %d | VM ID: %d | Status: %s | ExecTime: %.2f | Deadline: %.2f | SLA Violation: %s\n",
                         id, cloudlet.getVmId(), status, actualTime, deadline, slaViolated ? "YES" : "NO");
             }
-            System.out.println("=======================================Testing_111");
+
             System.out.println("=======================================");
             System.out.printf("Total Cloudlets: %d | Success: %d | Failed: %d\n", finishedList.size(), success, failed);
             System.out.printf("SLA Violations: %d | Total Penalty: $%.2f\n", violations, totalPenalty);
@@ -116,7 +114,7 @@ public class TaskSchedulerFailureSimulation {
     private static Datacenter createDatacenter(String name) throws Exception {
         List<Host> hostList = new ArrayList<>();
         List<Pe> peList = new ArrayList<>();
-        peList.add(new Pe(0, new PeProvisionerSimple(1000)));  // Simulate a processing unit with 1000 MIPS
+        peList.add(new Pe(0, new PeProvisionerSimple(1000)));
 
         int ram = 2048;
         long storage = 1000000;
